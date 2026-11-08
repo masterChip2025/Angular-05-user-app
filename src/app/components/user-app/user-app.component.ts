@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [UserComponent, FormUserComponent],
   templateUrl: './user-app.component.html',
+  styleUrls: ['./user-app.component.css'],
 })
 export class UserAppComponent implements OnInit {
   title: string = 'Listado de usuarios.';
@@ -37,13 +38,14 @@ export class UserAppComponent implements OnInit {
     } else {
       this.users = [...this.users, { ...user }];
     }
+
+    this.userSelected = new User();
+    this.setOpen();
     Swal.fire({
       title: 'Guardado!',
       text: 'El usuario ha sido guardado con exíto!',
       icon: 'success',
     });
-    this.userSelected = new User();
-    this.setOpen();
   }
 
   removeUsert(id: number): void {
@@ -68,12 +70,12 @@ export class UserAppComponent implements OnInit {
   }
 
   setSelectUser(userRow: User): void {
-    console.log({ userRow });
     this.userSelected = { ...userRow };
     this.open = true;
   }
 
   setOpen(): void {
+    this.userSelected = new User();
     this.open = !this.open;
   }
 }

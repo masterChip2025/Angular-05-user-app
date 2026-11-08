@@ -13,14 +13,6 @@
     </div>
   </div>
   <div class="row">
-    @if (open) {
-      <div class="col">
-        <app-form-user
-          (newUserEventEmitter)="addUser($event)"
-          [user]="userSelected"
-        />
-      </div>
-    }
     <div class="col">
       <app-user
         [users]="users"
@@ -30,3 +22,13 @@
     </div>
   </div>
 </div>
+
+@if (open) {
+  <div class="abrir-modal animacion fadeIn">
+    <app-form-user
+      (newUserEventEmitter)="addUser($event)"
+      [user]="userSelected"
+      (openEventEmitter)="setOpen()"
+    />
+  </div>
+}

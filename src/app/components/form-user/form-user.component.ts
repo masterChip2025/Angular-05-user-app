@@ -12,6 +12,7 @@ export class FormUserComponent {
   @Input() user: User;
 
   @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter();
+  @Output() openEventEmitter: EventEmitter<boolean> = new EventEmitter();
 
   constructor() {
     this.user = new User();
@@ -20,15 +21,19 @@ export class FormUserComponent {
   onSubmit(userForm: NgForm): void {
     if (userForm.valid) {
       this.newUserEventEmitter.emit(this.user);
-      console.log(this.user);
     }
+    userForm.reset();
+    userForm.resetForm();
+    this.user = new User();
+  }
+
+  onClear(userForm: NgForm): void {
+    this.user = new User();
     userForm.reset();
     userForm.resetForm();
   }
 
-  onClear(userForm: NgForm): void {
-    // this.user = new User();
-    userForm.reset();
-    userForm.resetForm();
+  onOpenClose(): void {
+    this.openEventEmitter.emit();
   }
 }
