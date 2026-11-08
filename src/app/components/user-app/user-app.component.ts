@@ -26,6 +26,14 @@ export class UserAppComponent implements OnInit {
     this.userService.findAll().subscribe((users) => (this.users = users));
     this.addUser();
     this.removeUsert();
+    this.findUserById();
+  }
+
+  findUserById() {
+    this.sharingDataService.findUserByIdEventEmitter.subscribe((id) => {
+      const user = this.users.find((user) => user.id == id);
+      this.sharingDataService.selectUserEventEmitter.emit(user);
+    });
   }
 
   addUser(): void {
