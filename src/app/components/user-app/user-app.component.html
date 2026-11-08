@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row m-0">
+    <div class="col col-2 bg-black">
+      <button
+        (click)="setOpen()"
+        class="btn btn-link btn-block pt-4 text-white"
+      >
+        {{ open === true ? "Cerrar " : "Crear Usuario" }}
+      </button>
+    </div>
+    <div class="col col-10 p-0">
+      <h2 class="text-center bg-black text-white py-3 m-0">{{ title }}</h2>
+    </div>
+  </div>
+  <div class="row">
+    @if (open) {
+      <div class="col">
+        <app-form-user
+          (newUserEventEmitter)="addUser($event)"
+          [user]="userSelected"
+        />
+      </div>
+    }
+    <div class="col">
+      <app-user
+        [users]="users"
+        (idUserEventEmitter)="removeUsert($event)"
+        (selectedUserEvent)="setSelectUser($event)"
+      ></app-user>
+    </div>
+  </div>
+</div>
