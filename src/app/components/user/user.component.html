@@ -1,3 +1,15 @@
+<div class="col col-2 bg-black">
+  <button
+    class="btn btn-link btn-block pt-4 text-white"
+    [routerLink]="'/users/create'"
+  >
+    Crear Usuario
+  </button>
+</div>
+<div class="col col-10 p-0">
+  <h2 class="text-center bg-black text-white py-3 m-0">{{ title }}</h2>
+</div>
+
 @if (users.length == 0) {
   <div class="alert alert-danger mt-2">
     <p>No hay registro de usuarios en el sistema.</p>

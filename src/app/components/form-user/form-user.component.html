@@ -1,170 +1,149 @@
-<!-- <h3 class="text-center mt-2">Formulario de Usuarios</h3> -->
-<div class="modal" tabindex="-1" style="display: block">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Formulario para
-          {{ user.id > 0 ? "actualizar" : "registrar" }} Usuarios
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          (click)="onOpenClose()"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
-          <div class="mb-3">
-            <label for="name">Nombre</label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Ingresa tu nombre"
-              class="form-control"
-              [(ngModel)]="user.name"
-              required
-              #name="ngModel"
-            />
-            @if (name.invalid && (name.dirty || name.touched)) {
-              <div class="alert alert-danger">
-                <p>El campo nombre es requerido</p>
-              </div>
-            }
-          </div>
+<div class="card">
+  <div class="card-content">
+    <div class="card-header">
+      <h5 class="card-title">
+        Formulario para
+        {{ user.id > 0 ? "actualizar" : "registrar" }} Usuarios
+      </h5>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
+        <div class="mb-3">
+          <label for="name">Nombre</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Ingresa tu nombre"
+            class="form-control"
+            [(ngModel)]="user.name"
+            required
+            #name="ngModel"
+          />
+          @if (name.invalid && (name.dirty || name.touched)) {
+            <div class="alert alert-danger">
+              <p>El campo nombre es requerido</p>
+            </div>
+          }
+        </div>
 
-          <div class="mb-3">
-            <label for="lastName" class="form-label">Apellido</label>
-            <input
-              type="text"
-              class="form-control"
-              id="lastName"
-              name="lastName"
-              placeholder="Ingresa tu apellido"
-              [(ngModel)]="user.lastName"
-              required
-              #lastName="ngModel"
-            />
-            @if (lastName.invalid && (lastName.dirty || lastName.touched)) {
-              <div class="alert alert-danger">
-                <p>El campo Apellido no puede estar vacio.</p>
-              </div>
-            }
-          </div>
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Apellido</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            name="lastName"
+            placeholder="Ingresa tu apellido"
+            [(ngModel)]="user.lastName"
+            required
+            #lastName="ngModel"
+          />
+          @if (lastName.invalid && (lastName.dirty || lastName.touched)) {
+            <div class="alert alert-danger">
+              <p>El campo Apellido no puede estar vacio.</p>
+            </div>
+          }
+        </div>
 
-          <div class="mb-3">
-            <label for="email" class="form-label">Correo Electrónico</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="ejemplo@correo.com"
-              [(ngModel)]="user.email"
-              required
-              #email="ngModel"
-            />
-            @if (email.invalid && (email.dirty || email.touched)) {
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="ejemplo@correo.com"
+            [(ngModel)]="user.email"
+            required
+            #email="ngModel"
+          />
+          @if (email.invalid && (email.dirty || email.touched)) {
+            <div class="alert alert-danger">
+              <p>
+                El campo email no puede estar vacio y debe ser un correo valido.
+              </p>
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Usuario</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Elige un nombre de usuario"
+            [(ngModel)]="user.username"
+            required
+            minlength="8"
+            #username="ngModel"
+          />
+          @if (username.invalid && (username.dirty || username.touched)) {
+            @if (username.errors!["minlength"]) {
               <div class="alert alert-danger">
                 <p>
-                  El campo email no puede estar vacio y debe ser un correo
-                  valido.
+                  El campo username debe tener minimo 8 caracteres
+                  alfanumericos.
                 </p>
               </div>
             }
-          </div>
-
-          <div class="mb-3">
-            <label for="username" class="form-label">Usuario</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              placeholder="Elige un nombre de usuario"
-              [(ngModel)]="user.username"
-              required
-              minlength="8"
-              #username="ngModel"
-            />
-            @if (username.invalid && (username.dirty || username.touched)) {
-              @if (username.errors!["minlength"]) {
-                <div class="alert alert-danger">
-                  <p>
-                    El campo username debe tener minimo 8 caracteres
-                    alfanumericos.
-                  </p>
-                </div>
-              }
-              @if (username.errors!["required"]) {
-                <div class="alert alert-danger">
-                  <p>El campo nombre de usuario no puede estar vacio.</p>
-                </div>
-              }
+            @if (username.errors!["required"]) {
+              <div class="alert alert-danger">
+                <p>El campo nombre de usuario no puede estar vacio.</p>
+              </div>
             }
-          </div>
+          }
+        </div>
 
-          <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              placeholder="Ingresa tu contraseña"
-              [(ngModel)]="user.password"
-              required
-              minlength="7"
-              #password="ngModel"
-            />
-            @if (password.invalid && (password.dirty || password.touched)) {
-              @if (password.errors!["minlength"]) {
-                <div class="alert alert-danger">
-                  <p>
-                    El campo contraseña debe tener minimo 7 caracteres
-                    alfanumericos.
-                  </p>
-                </div>
-              }
-              @if (password.errors!["required"]) {
-                <div class="alert alert-danger">
-                  <p>El campo contraseña no puede estar vacio.</p>
-                </div>
-              }
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Ingresa tu contraseña"
+            [(ngModel)]="user.password"
+            required
+            minlength="7"
+            #password="ngModel"
+          />
+          @if (password.invalid && (password.dirty || password.touched)) {
+            @if (password.errors!["minlength"]) {
+              <div class="alert alert-danger">
+                <p>
+                  El campo contraseña debe tener minimo 7 caracteres
+                  alfanumericos.
+                </p>
+              </div>
             }
-          </div>
+            @if (password.errors!["required"]) {
+              <div class="alert alert-danger">
+                <p>El campo contraseña no puede estar vacio.</p>
+              </div>
+            }
+          }
+        </div>
 
-          <div class="clearfix">
-            <button
-              type="submit"
-              class="btn btn-primary btn-sm text-uppercase"
-              [disabled]="userForm.invalid"
-            >
-              {{ user.id > 0 ? "Actualizar" : "Registrarse" }}
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary btn-sm text-uppercase"
-              (click)="onClear(userForm)"
-            >
-              Limpiar
-            </button>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          (click)="onOpenClose()"
-        >
-          Close
-        </button>
-      </div>
+        <div class="clearfix">
+          <button
+            type="submit"
+            class="btn btn-primary btn-sm text-uppercase"
+            [disabled]="userForm.invalid"
+          >
+            {{ user.id > 0 ? "Actualizar" : "Registrarse" }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm text-uppercase"
+            (click)="onClear(userForm)"
+          >
+            Limpiar
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

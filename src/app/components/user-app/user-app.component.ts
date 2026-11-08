@@ -1,81 +1,78 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
-import { UserComponent } from '../user/user.component';
-import { FormUserComponent } from '../form-user/form-user.component';
 import Swal from 'sweetalert2';
+import { RouterOutlet, Router } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { SharingDataService } from '../../services/sharing-data.service';
 
 @Component({
   selector: 'user-app',
   standalone: true,
-  imports: [UserComponent, FormUserComponent],
+  imports: [NavbarComponent, RouterOutlet],
   templateUrl: './user-app.component.html',
   styleUrls: ['./user-app.component.css'],
 })
 export class UserAppComponent implements OnInit {
-  title: string = 'Listado de usuarios.';
   users: User[] = [];
-  userSelected: User;
 
-  open: boolean = false;
-
-  constructor(private userService: UserService) {
-    this.userSelected = new User();
-  }
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private sharingDataService: SharingDataService,
+  ) {}
 
   ngOnInit(): void {
     this.userService.findAll().subscribe((users) => (this.users = users));
+    this.addUser();
+    this.removeUsert();
   }
 
-  addUser(user: User): void {
-    if (user.id > 0) {
-      this.users = this.users.map((u) => {
-        if (u.id === user.id) {
-          return { ...user };
-        }
-        return u;
-      });
-    } else {
-      this.users = [...this.users, { ...user }];
-    }
-
-    this.userSelected = new User();
-    this.setOpen();
-    Swal.fire({
-      title: 'Guardado!',
-      text: 'El usuario ha sido guardado con exíto!',
-      icon: 'success',
-    });
-  }
-
-  removeUsert(id: number): void {
-    Swal.fire({
-      title: 'Seguro que desea eliminar a este usuario?',
-      text: 'Ciudado el usuario sera eliminado definitivamente si da click en Si, Eliminar.!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Eliminar!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.users = this.users.filter((user) => user.id !== id);
-        Swal.fire({
-          title: 'Elimianar Usuario!',
-          text: 'El usuario se elimino con exito.',
-          icon: 'success',
-        });
+  addUser(): void {
+    this.sharingDataService.newUserEventEmitter.subscribe((user) => {
+      if (user.id > 0) {
+        this.users = this.users.map((u) =>
+          u.id === user.id ? { ...user } : u,
+        );
+      } else {
+        this.users = [...this.users, { ...user, id: new Date().getTime() }];
       }
+      this.router.navigate(['/users'], { state: this.users });
+      Swal.fire({
+        title: 'Guardado!',
+        text: 'El usuario ha sido guardado con exíto!',
+        icon: 'success',
+      });
     });
   }
 
-  setSelectUser(userRow: User): void {
-    this.userSelected = { ...userRow };
-    this.open = true;
-  }
-
-  setOpen(): void {
-    this.userSelected = new User();
-    this.open = !this.open;
+  removeUsert(): void {
+    this.sharingDataService.idUserEventEmitter.subscribe((id) => {
+      Swal.fire({
+        title: 'Seguro que desea eliminar a este usuario?',
+        text: 'Ciudado el usuario sera eliminado definitivamente si da click en Si, Eliminar.!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Eliminar!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.users = this.users.filter((user) => user.id !== id);
+          this.router
+            .navigate(['users/create'], { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['/users'], {
+                state: { users: this.users },
+              });
+            });
+          Swal.fire({
+            title: 'Elimianar Usuario!',
+            text: 'El usuario se elimino con exito.',
+            icon: 'success',
+          });
+        }
+      });
+    });
   }
 }
